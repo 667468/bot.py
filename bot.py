@@ -37,20 +37,19 @@ async def doviz(ctx):
  value_kwd_alis = response.json()['kwd']['inverseRate']
  value_sar_alis = response.json()['sar']['inverseRate']
  value_son_guncellenme = response.json()['usd']['date']
- await bot.say("Güncel 1 ABD Doları: " + "Alış fiyatı: " + str(value_usd_alis) + " TRY")
- await bot.say("Güncel 1 Euro: " + "Alış fiyatı: " + str(value_eur_alis) + " TRY")
- await bot.say("Güncel 1 İngiliz Sterlini: " + "Alış fiyatı: " + str(value_gbp_alis) + " TRY")
- await bot.say("Güncel 1 Kanada Doları: " + "Alış fiyatı: " + str(value_cad_alis) + " TRY")
- await bot.say("Güncel 1 İşviçre Frangı: " + "Alış fiyatı: " + str(value_chf_alis) + " TRY")
- await bot.say("Güncel 1 Kuveyt Dinarı: " + "Alış fiyatı: " + str(value_kwd_alis) + " TRY")
- await bot.say("Güncel 1 S. Arabistan Riyali: " + "Alış fiyatı: " + str(value_sar_alis) + " TRY")
- await bot.say("Son güncellenme: " + value_son_guncellenme)
- # TODO: USD değil de TRY olabilir.
- # Bitcoin fiyatı
- bitcoinurl = "https://api.coindesk.com/v1/bpi/currentprice/BTC.json"
+ await bot.say("Güncel 1 ABD Doları " + "alış fiyatı: " + str(value_usd_alis) + " TRY")
+ await bot.say("Güncel 1 Euro " + "alış fiyatı: " + str(value_eur_alis) + " TRY")
+ await bot.say("Güncel 1 İngiliz Sterlini " + "alış fiyatı: " + str(value_gbp_alis) + " TRY")
+ await bot.say("Güncel 1 Kanada Doları " + "alış fiyatı: " + str(value_cad_alis) + " TRY")
+ await bot.say("Güncel 1 İşviçre Frangı " + "alış fiyatı: " + str(value_chf_alis) + " TRY")
+ await bot.say("Güncel 1 Kuveyt Dinarı " + "alış fiyatı: " + str(value_kwd_alis) + " TRY")
+ await bot.say("Güncel 1 S. Arabistan Riyali " + "alış fiyatı: " + str(value_sar_alis) + " TRY")
+ # Bitcoin fiyatı (TRY cinsinden)
+ bitcoinurl = "https://api.coindesk.com/v1/bpi/currentprice/TRY.json"
  response = requests.get(bitcoinurl)
- bitcoin_value = response.json()['bpi']['USD']['rate']
- await bot.say("Güncel Bitcoin alış fiyatı: $" + bitcoin_value)
+ bitcoin_value = response.json()['bpi']['TRY']['rate']
+ await bot.say("Güncel 1 Bitcoin " + "alış fiyatı: " + bitcoin_value + " TRY")
+ await bot.say("Son güncellenme: " + value_son_guncellenme)
 
 # TODO: Haftalık ve günlük olarak havadurumu tahmini
 #@bot.command(name='havadurumu',
