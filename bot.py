@@ -21,7 +21,7 @@ async def on_ready():
 async def bbot(ctx):
  await bot.say("Ben Fatih Ünsever tarafından yazılmış bir Discord uygulaması botuyum!")
 
-# Güncel döviz kurlarını gösterir.
+# Güncel döviz kurunu ve bitcoin fiyatını gösterir.
 @bot.command(name='doviz',
 	description="Güncel döviz kurunu ve bitcoin fiyatını gösterir.",
 	aliases=['??doviz'],
@@ -36,7 +36,7 @@ async def doviz(ctx):
  value_chf_alis = response.json()['chf']['inverseRate']
  value_kwd_alis = response.json()['kwd']['inverseRate']
  value_sar_alis = response.json()['sar']['inverseRate']
- value_son_guncellenme = response.json()['usd']['date']
+ value_son_guncelleme = response.json()['usd']['date']
  await bot.say("Güncel 1 ABD Doları " + "alış fiyatı: " + str(value_usd_alis) + " TRY")
  await bot.say("Güncel 1 Euro " + "alış fiyatı: " + str(value_eur_alis) + " TRY")
  await bot.say("Güncel 1 İngiliz Sterlini " + "alış fiyatı: " + str(value_gbp_alis) + " TRY")
@@ -49,21 +49,43 @@ async def doviz(ctx):
  response = requests.get(bitcoinurl)
  bitcoin_value = response.json()['bpi']['TRY']['rate']
  await bot.say("Güncel 1 Bitcoin " + "alış fiyatı: " + bitcoin_value + " TRY")
- await bot.say("Son güncellenme: " + value_son_guncellenme)
+ await bot.say("Son güncelleme: " + value_son_guncelleme)
 
-# TODO: Haftalık ve günlük olarak havadurumu tahmini
-#@bot.command(name='havadurumu',
-#	description="$SEHIR şehri için güncel havadurumunu gösterir.",
-#	pass_context=True)
-#async def havadurumu(ctx):
-# await bot.say("WIP!!")
+# İstanbul şehri için güncel havadurumu bilgisini gösterir.
+@bot.command(name='havadurumu',
+	description="İstanbul şehri için güncel havadurumu bilgisini gösterir.",
+	pass_context=True)
+async def havadurumu(ctx):
+ # TODO: Havadurumu bilgilerini Türkçe'ye ayarla! API İngilizce
+ havadurumuurl = "https://www.metaweather.com/api/location/2344116/"
+ response = requests.get(havadurumuurl)
+ value_havadurumu = response.json()['consolidated_weather'][0]['weather_state_name']
+ value_ortsicaklik_havadurumu = response.json()['consolidated_weather'][0]['the_temp']
+ value_minsicaklik_havadurumu = response.json()['consolidated_weather'][0]['min_temp']
+ value_maxsicaklik_havadurumu = response.json()['consolidated_weather'][0]['max_temp']
+ value_ruzgarhizi_havadurumu = response.json()['consolidated_weather'][0]['wind_speed']
+ value_ruzgaryonu_havadurumu = response.json()['consolidated_weather'][0]['wind_direction_compass']
+ value_nem_havadurumu = response.json()['consolidated_weather'][0]['humidity']
+ value_dogus_havadurumu = response.json()['sun_rise']
+ value_batis_havadurumu = response.json()['sun_set']
+ value_tarih_havadurumu = response.json()['consolidated_weather'][0]['applicable_date']
+ await bot.say("Hava durumu: " + value_havadurumu)
+ await bot.say("Gün içerisinde Ort. Sıcaklık: " + str(value_ortsicaklik_havadurumu) + "°C")
+ await bot.say("Gün içerisinde Min. Sıcaklık: " + str(value_minsicaklik_havadurumu) + "°C")
+ await bot.say("Gün içerisinde Max. Sıcaklık: " + str(value_maxsicaklik_havadurumu) + "°C")
+ await bot.say("Rüzgar hızı: " + str(value_ruzgarhizi_havadurumu) + " " + value_ruzgaryonu_havadurumu)
+ await bot.say("Nem Miktarı: " + str(value_nem_havadurumu))
+ await bot.say("Güneş Doğuşu: " + str(value_dogus_havadurumu))
+ await bot.say("Güneş Batışı : " + str(value_batis_havadurumu))
+ await bot.say("Hava durumu tarihi: " + value_tarih_havadurumu)
 
-#TODO: Sadece grup admini tarafından kullanılacak bir komut haline getir!
+# Yeniden eskiye yazdığınız sayı kadar mesaj siler.(Minimum 2 mesaj siler)
 @bot.command(name='clean',
 	description="Bu komut riskli olduğundan sadece sahibi tarafından kullanılabilir. Kullanıldığında; yeniden eskiye yazdığınız sayı kadar mesaj siler.(Minimum 2 mesaj siler)",
-	#aliases=['??clean'],
+	aliases=['??clean'],
 	pass_context=True)
 async def clean(ctx, number):
+ # TODO: Sadece grup admini tarafından kullanılacak bir komut haline getir!
  msg = []
  number = int(number)
  async for x in bot.logs_from(ctx.message.channel, limit=number):
