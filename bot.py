@@ -41,7 +41,7 @@ async def doviz(ctx):
  await bot.say("Güncel 1 Euro " + "alış fiyatı: " + str(value_eur_alis) + " TRY")
  await bot.say("Güncel 1 İngiliz Sterlini " + "alış fiyatı: " + str(value_gbp_alis) + " TRY")
  await bot.say("Güncel 1 Kanada Doları " + "alış fiyatı: " + str(value_cad_alis) + " TRY")
- await bot.say("Güncel 1 İşviçre Frangı " + "alış fiyatı: " + str(value_chf_alis) + " TRY")
+ await bot.say("Güncel 1 İsviçre Frangı " + "alış fiyatı: " + str(value_chf_alis) + " TRY")
  await bot.say("Güncel 1 Kuveyt Dinarı " + "alış fiyatı: " + str(value_kwd_alis) + " TRY")
  await bot.say("Güncel 1 S. Arabistan Riyali " + "alış fiyatı: " + str(value_sar_alis) + " TRY")
  # Bitcoin fiyatı (TRY cinsinden)
