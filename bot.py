@@ -16,7 +16,6 @@ async def on_ready():
 
 @bot.command(name='bbot',
 	description="Botun hakkında bilgi verir.",
-	aliases=['??bbot'],
 	pass_context=True)
 async def bbot(ctx):
  await bot.say("Ben Fatih Ünsever tarafından yazılmış bir Discord uygulaması botuyum!")
@@ -24,7 +23,6 @@ async def bbot(ctx):
 # Güncel döviz kurunu ve bitcoin fiyatını gösterir.
 @bot.command(name='doviz',
 	description="Güncel döviz kurunu ve bitcoin fiyatını gösterir.",
-	aliases=['??doviz'],
 	pass_context=True)
 async def doviz(ctx):
  dovizurl = "http://www.floatrates.com/daily/try.json"
@@ -70,11 +68,11 @@ async def havadurumu(ctx):
  value_batis_havadurumu = response.json()['sun_set']
  value_tarih_havadurumu = response.json()['consolidated_weather'][0]['applicable_date']
  await bot.say("Hava durumu: " + value_havadurumu)
- await bot.say("Gün içerisinde Ort. Sıcaklık: " + str(value_ortsicaklik_havadurumu) + "°C")
- await bot.say("Gün içerisinde Min. Sıcaklık: " + str(value_minsicaklik_havadurumu) + "°C")
- await bot.say("Gün içerisinde Max. Sıcaklık: " + str(value_maxsicaklik_havadurumu) + "°C")
+ await bot.say("Gün içerisinde Ort. Sıcaklık: " + str(value_ortsicaklik_havadurumu) + " °C")
+ await bot.say("Gün içerisinde Min. Sıcaklık: " + str(value_minsicaklik_havadurumu) + " °C")
+ await bot.say("Gün içerisinde Max. Sıcaklık: " + str(value_maxsicaklik_havadurumu) + " °C")
  await bot.say("Rüzgar hızı: " + str(value_ruzgarhizi_havadurumu) + " " + value_ruzgaryonu_havadurumu)
- await bot.say("Nem Miktarı: " + str(value_nem_havadurumu))
+ await bot.say("Nem Miktarı: %" + str(value_nem_havadurumu))
  await bot.say("Güneş Doğuşu: " + str(value_dogus_havadurumu))
  await bot.say("Güneş Batışı : " + str(value_batis_havadurumu))
  await bot.say("Hava durumu tarihi: " + value_tarih_havadurumu)
@@ -82,7 +80,6 @@ async def havadurumu(ctx):
 # Yeniden eskiye yazdığınız sayı kadar mesaj siler.(Minimum 2 mesaj siler)
 @bot.command(name='clean',
 	description="Bu komut riskli olduğundan sadece sahibi tarafından kullanılabilir. Kullanıldığında; yeniden eskiye yazdığınız sayı kadar mesaj siler.(Minimum 2 mesaj siler)",
-	aliases=['??clean'],
 	pass_context=True)
 async def clean(ctx, number):
  # TODO: Sadece grup admini tarafından kullanılacak bir komut haline getir!
