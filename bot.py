@@ -1,6 +1,6 @@
 import telebot
 
-token = (os.environ['BOT_TOKEN']) # Discord botu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin.
+token = (os.environ['BOT_TOKEN']) # Telegram botunu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin.
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=['help'])
