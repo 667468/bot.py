@@ -18,8 +18,8 @@ def help(message):
 def text(message):
 	if '/start' in message.text:
 		welcome = ('Hoşgeldiniz! '
-				   'Komutlar için "/help" yazabilirsiniz!\n'
-				  )
+			'Komutlar için "/help" yazabilirsiniz!\n'
+			)
 		bot.reply_to(message, welcome)
 		return
 
