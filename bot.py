@@ -1,19 +1,32 @@
 import telebot
 import os
+import random
+import string
 
 token = (os.environ['BOT_TOKEN']) # Telegram botunu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin.
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=['help'])
 def help(message):
-	bot.reply_to(message, 'WIP!')
+	info = ('/randompass - Rastgele, rakam ve sayılardan oluşan, 11 haneli şifre oluşturur.\n'
+			)
+	bot.send_message(message.chat.id, info)
 
 @bot.message_handler(content_types=['text'])
 @bot.edited_message_handler(content_types=['text'])
 def text(message):
 	if '/start' in message.text:
-		bot.reply_to(message, 'Hoşgeldiniz! "/help"')
+		welcome = ('Hoşgeldiniz! '
+				   'Komutlar için "/help" yazabilirsiniz!\n'
+				  )
+		bot.send_message(message.chat.id, welcome)
 		return
-	bot.reply_to(message, 'Komutlar için "/help" yazabilirsiniz!')
 
-bot.polling()
+	if '/randompass' in message.text:
+		passlen = 11 #TODO: İstenilen sayıya göre ayarla!
+		passgenerator = [random.choice(string.ascii_letters+string.digits) for i in range(passlen)]
+		passgenerator = ("".join(passgenerator))
+		bot.send_message(message.chat.id, passgenerator)
+		return
+
+bot.polling(none_stop=True, interval=0, timeout=3)
