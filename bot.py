@@ -1,4 +1,5 @@
 import telebot
+import os
 
 token = (os.environ['BOT_TOKEN']) # Telegram botunu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin.
 bot = telebot.TeleBot(token)
