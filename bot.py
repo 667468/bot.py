@@ -9,8 +9,8 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['help'])
 def help(message):
 	info = ('/randompass - Rastgele, rakam ve sayılardan oluşan, 11 haneli şifre oluşturur.\n'
-			'/flipcoin - Yazı-tura atar.\n'
-			)
+		'/flipcoin - Yazı-tura atar.\n'
+		)
 	bot.send_message(message.chat.id, info)
 
 @bot.message_handler(content_types=['text'])
