@@ -11,7 +11,7 @@ def help(message):
 	info = ('/randompass - Rastgele, rakam ve sayılardan oluşan, 11 haneli şifre oluşturur.\n'
 		'/flipcoin - Yazı-tura atar.\n'
 		)
-	bot.send_message(message.chat.id, info)
+	bot.reply_to(message, info)
 
 @bot.message_handler(content_types=['text'])
 @bot.edited_message_handler(content_types=['text'])
@@ -20,7 +20,7 @@ def text(message):
 		welcome = ('Hoşgeldiniz! '
 				   'Komutlar için "/help" yazabilirsiniz!\n'
 				  )
-		bot.send_message(message.chat.id, welcome)
+		bot.reply_to(message, welcome)
 		return
 
 	if '/randompass' in message.text:
