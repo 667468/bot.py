@@ -12,6 +12,7 @@ def help(message):
 	info = ('/randompass - Rastgele, harf ve rakamlardan oluşan, 11 haneli şifre oluşturur.\n'
 		'/flipcoin - Yazı-tura atar.\n'
 		'/randomcat - Rastgele kedi fotoğrafı gönderir.\n'
+		'/randomdog - Rastgele köpek fotoğrafı gönderir.\n'
 		)
 	bot.reply_to(message, info)
 
@@ -43,6 +44,13 @@ def text(message):
 		response = requests.get(randomcaturl)
 		value_random_cat = response.json()[0]['url']
 		bot.send_photo(message.chat.id, value_random_cat)
+		return
+
+	if '/randomdog' in message.text:
+		randomdogurl = "https://dog.ceo/api/breeds/image/random"
+		response = requests.get(randomdogurl)
+		value_random_dog = response.json()['message']
+		bot.send_photo(message.chat.id, value_random_dog)
 		return
 
 bot.polling(none_stop=True, interval=0, timeout=3)
