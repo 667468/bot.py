@@ -10,10 +10,11 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['help'])
 def help(message):
 	info = ('/randompass - Rastgele, harf ve rakamlardan oluşan, 11 haneli şifre oluşturur.\n'
+		'/randomusername - Rastgele kullanıcı adı üretir.\n'
 		'/flipcoin - Yazı-tura atar.\n'
 		'/randomcat - Rastgele kedi fotoğrafı gönderir.\n'
 		'/randomdog - Rastgele köpek fotoğrafı gönderir.\n'
-		'/randombb - Rastgele Breaking Bad dizisinden replik gönderir.'
+		'/randombb - Rastgele Breaking Bad dizisinden replik gönderir.\n'
 		)
 	bot.reply_to(message, info)
 
@@ -33,6 +34,12 @@ def text(message):
 		passgenerator = ("".join(passgenerator))
 		bot.send_message(message.chat.id, passgenerator)
 		return
+
+	if '/randomusername' in message.text:
+		randomusernameurl = "https://api.randomuser.me/"
+		response = requests.get(randomusernameurl)
+		value_random_username = response.json()['results'][0]['login']['username']
+		bot.send_message(message.chat.id, value_random_username)
 
 	if '/flipcoin' in message.text:
 		liste = ['yazı', 'tura']
