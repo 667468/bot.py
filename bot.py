@@ -2,6 +2,7 @@ import telebot
 import os
 import random
 import string
+import requests
 
 token = (os.environ['BOT_TOKEN']) # Telegram botunu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin.
 bot = telebot.TeleBot(token)
@@ -10,6 +11,7 @@ bot = telebot.TeleBot(token)
 def help(message):
 	info = ('/randompass - Rastgele, harf ve rakamlardan oluşan, 11 haneli şifre oluşturur.\n'
 		'/flipcoin - Yazı-tura atar.\n'
+		'/randomcat - Rastgele kedi fotoğrafı gönderir.\n'
 		)
 	bot.reply_to(message, info)
 
@@ -34,6 +36,13 @@ def text(message):
 		liste = ['yazı', 'tura']
 		yazitura = [random.choice(liste)]
 		bot.send_message(message.chat.id, yazitura)
+		return
+
+	if '/randomcat' in message.text:
+		randomcaturl = "https://api.thecatapi.com/v1/images/search?format=json"
+		response = requests.get(randomcaturl)
+		value_random_cat = response.json()[0]['url']
+		bot.send_photo(message.chat.id, value_random_cat)
 		return
 
 bot.polling(none_stop=True, interval=0, timeout=3)
