@@ -13,6 +13,7 @@ def help(message):
 		'/flipcoin - Yazı-tura atar.\n'
 		'/randomcat - Rastgele kedi fotoğrafı gönderir.\n'
 		'/randomdog - Rastgele köpek fotoğrafı gönderir.\n'
+		'/randombb - Rastgele Breaking Bad dizisinden replik gönderir.'
 		)
 	bot.reply_to(message, info)
 
@@ -52,5 +53,12 @@ def text(message):
 		value_random_dog = response.json()['message']
 		bot.send_photo(message.chat.id, value_random_dog)
 		return
+
+	if '/randombb' in message.text:
+		randombburl = "https://breaking-bad-quotes.herokuapp.com/v1/quotes"
+		response = requests.get(randombburl)
+		value_random_bbquote = response.json()[0]['quote']
+		value_random_bbauthor = response.json()[0]['author']
+		bot.send_message(message.chat.id, value_random_bbquote + " - " + value_random_bbauthor)
 
 bot.polling(none_stop=True, interval=0, timeout=3)
