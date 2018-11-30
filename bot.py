@@ -5,7 +5,6 @@ import requests
 
 bot_prefix = ("!!", "??", ">>") # Bunu kendi isteğinize göre değiştirebilirsiniz. Botun komutu algılaması için, komutun başında bu üç prefixte biri olması gerekli. Örneğin; !!doviz, ??doviz, >>doviz gibi...
 token = (os.environ['BOT_TOKEN']) # Discord botu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin. "os.environ" kısmı; bu bot Github üzerinde paylaşıldığı ve Heroku üzerinde çalıştığı için eklendi. Kendi sunucunuzda çalıştıracak veya botun tokenini direk ekleyecekseniz silebilirsiniz.
-admin_id = (os.environ['ADMIN_ID']) # Bazı tehlikeli komutların, sadece sunucu admini tarafında kullanılması için gerekli. https://bit.ly/2KHkB9c
 bot = Bot(command_prefix=bot_prefix)
 
 @bot.event
@@ -78,10 +77,14 @@ async def havadurumu(ctx):
 	description="Bu komut riskli olduğundan sadece sahibi tarafından kullanılabilir. Kullanıldığında; yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler.",
 	pass_context=True)
 async def clean(ctx, number):
- msg = []
- number = int(number)
- async for x in bot.logs_from(ctx.message.channel, limit=number):
-    msg.append(x)
- await bot.delete_messages(msg)
+ if ctx.message.author.server_permissions.administrator:
+  msg = []
+  number = int(number)
+  async for x in bot.logs_from(ctx.message.channel, limit=number):
+        msg.append(x)
+  await bot.delete_messages(msg)
+ else:
+  text = "Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author)
+  await bot.send_message(ctx.message.channel, text)
 
 bot.run(token)
