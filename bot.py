@@ -1,3 +1,5 @@
+import discord
+from discord.ext import commands
 from discord.ext.commands import Bot
 from discord import Game
 import os
@@ -19,6 +21,45 @@ async def on_ready():
 	pass_context=True)
 async def bbot(ctx):
  await bot.say("Ben Fatih Ünsever tarafından yazılmış bir Discord uygulaması botuyum!")
+
+# Kullanıcıyı sunucudan kickler.
+@bot.command(pass_context=True)
+async def kick(ctx, userName: discord.Member):
+ if ctx.message.author.server_permissions.administrator:
+  await bot.kick(userName)
+  print("{} isimli kullanıcı kicklendi!".format(userName))
+ else:
+  await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
+
+# Kullanıcıyı sunucudan banlar.
+@bot.command(pass_context=True)
+async def ban(ctx, userName: discord.Member):
+ if ctx.message.author.server_permissions.administrator:
+  await bot.ban(userName)
+  print("{} isimli kullanıcı banlandı!".format(userName))
+ else:
+  await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
+
+# Kullanıcıyı sunucudan unbanlar. # TODO: TEST EDILMEDI!
+@bot.command(pass_context=True)
+async def unban(ctx, userName: discord.Member):
+ if ctx.message.author.server_permissions.administrator:
+  await bot.unban(userName)
+  print("{} isimli kullanıcı unbanlandı!".format(userName))
+ else:
+  await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
+
+# Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler.
+@bot.command(pass_context=True)
+async def clean(ctx, number):
+ if ctx.message.author.server_permissions.administrator:
+  msg = []
+  number = int(number)
+  async for x in bot.logs_from(ctx.message.channel, limit=number):
+        msg.append(x)
+  await bot.delete_messages(msg)
+ else:
+  await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
 # Güncel döviz kurunu gösterir.
 @bot.command(name='doviz',
@@ -71,19 +112,5 @@ async def havadurumu(ctx):
  	"Güneş'in doğuşu: " + dogus_havadurumu + "\n" \
  	"Güneş'in batışı : " + batis_havadurumu + "\n" \
  	"Hava durumu son güncelleme: " + tarih_havadurumu)
-
-# Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler.
-@bot.command(name='clean',
-	description="Bu komut riskli olduğundan sadece sahibi tarafından kullanılabilir. Kullanıldığında; yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler.",
-	pass_context=True)
-async def clean(ctx, number):
- if ctx.message.author.server_permissions.administrator:
-  msg = []
-  number = int(number)
-  async for x in bot.logs_from(ctx.message.channel, limit=number):
-        msg.append(x)
-  await bot.delete_messages(msg)
- else:
-  await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
 bot.run(token)
