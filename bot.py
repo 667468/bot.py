@@ -21,7 +21,7 @@ async def on_ready():
 async def bbot(ctx):
  await bot.say("Ben Fatih Ünsever tarafından yazılmış bir Discord uygulaması botuyum!")
 
-# Güncel döviz kurunu ve bitcoin fiyatını gösterir.
+# Güncel döviz kurunu gösterir.
 @bot.command(name='doviz',
 	description="Güncel döviz kurunu ve bitcoin fiyatını gösterir.",
 	pass_context=True)
@@ -36,21 +36,14 @@ async def doviz(ctx):
  kwd_alis = response.json()['kwd']['inverseRate']
  sar_alis = response.json()['sar']['inverseRate']
  son_guncelleme = response.json()['usd']['date']
- await bot.say("Güncel 1 ABD Doları " + "alış fiyatı: " + format(float(usd_alis)) + " TRY\n" \
- 	"Güncel 1 Euro " + "alış fiyatı: " + format(float(eur_alis)) + " TRY\n" \
- 	"Güncel 1 İngiliz Sterlini " + "alış fiyatı: " + format(float(gbp_alis)) + " TRY\n" \
- 	"Güncel 1 Kanada Doları " + "alış fiyatı: " + format(float(cad_alis)) + " TRY\n" \
- 	"Güncel 1 İsviçre Frangı " + "alış fiyatı: " + format(float(chf_alis)) + " TRY\n" \
- 	"Güncel 1 Kuveyt Dinarı " + "alış fiyatı: " + format(float(kwd_alis)) + " TRY\n" \
- 	"Güncel 1 S. Arabistan Riyali " + "alış fiyatı: " + format(float(sar_alis)) + " TRY\n" \
+ await bot.say("Güncel 1 ABD Doları " + "alış fiyatı: {}".format(float("%.2f" % usd_alis)) + " TRY\n" \
+ 	"Güncel 1 Euro " + "alış fiyatı: {}".format(float("%.2f" % eur_alis)) + " TRY\n" \
+ 	"Güncel 1 İngiliz Sterlini " + "alış fiyatı: {}".format(float("%.2f" % gbp_alis)) + " TRY\n" \
+ 	"Güncel 1 Kanada Doları " + "alış fiyatı: {}".format(float("%.2f" % cad_alis)) + " TRY\n" \
+ 	"Güncel 1 İsviçre Frangı " + "alış fiyatı: {}".format(float("%.2f" % chf_alis)) + " TRY\n" \
+ 	"Güncel 1 Kuveyt Dinarı " + "alış fiyatı: {}".format(float("%.2f" % kwd_alis)) + " TRY\n" \
+ 	"Güncel 1 S. Arabistan Riyali " + "alış fiyatı: {}".format(float("%.2f" % sar_alis)) + " TRY\n" \
  	"Döviz son güncelleme: " + son_guncelleme)
- # Bitcoin fiyatı (TRY cinsinden)
- bitcoinurl = "https://api.coindesk.com/v1/bpi/currentprice/TRY.json"
- response = requests.get(bitcoinurl)
- bitcoin_value = response.json()['bpi']['TRY']['rate']
- son_guncelleme = response.json()['time']['updated']
- await bot.say("Güncel 1 Bitcoin " + "alış fiyatı: " + bitcoin_value + " TRY\n" \
- 	"Bitcoin son güncelleme: " + son_guncelleme)
 
 # İstanbul şehri için güncel havadurumu bilgisini gösterir.
 @bot.command(name='havadurumu',
@@ -71,11 +64,11 @@ async def havadurumu(ctx):
  batis_havadurumu = response.json()['sun_set']
  tarih_havadurumu = response.json()['consolidated_weather'][0]['applicable_date']
  await bot.say("Hava durumu: " + havadurumu + "\n" \
- 	"Gün içerisinde Ort. sıcaklık: " + format(int(ortsicaklik_havadurumu)) + " °C\n" \
- 	"Gün içerisinde Min. sıcaklık: " + format(int(minsicaklik_havadurumu)) + " °C\n" \
- 	"Gün içerisinde Max. sıcaklık: " + format(int(maxsicaklik_havadurumu)) + " °C\n" \
- 	"Rüzgar hızı: " + format(int(ruzgarhizi_havadurumu)) + " " + ruzgaryonu_havadurumu + "\n" \
- 	"Nem miktarı: %" + format(int(nem_havadurumu)) + "\n" \
+ 	"Gün içerisinde Ort. sıcaklık: {}".format(int(ortsicaklik_havadurumu)) + " °C\n" \
+ 	"Gün içerisinde Min. sıcaklık: {}".format(int(minsicaklik_havadurumu)) + " °C\n" \
+ 	"Gün içerisinde Max. sıcaklık: {}".format(int(maxsicaklik_havadurumu)) + " °C\n" \
+ 	"Rüzgar hızı: {}".format(int(ruzgarhizi_havadurumu)) + " " + ruzgaryonu_havadurumu + "\n" \
+ 	"Nem miktarı: %{}".format(int(nem_havadurumu)) + "\n" \
  	"Güneş'in doğuşu: " + dogus_havadurumu + "\n" \
  	"Güneş'in batışı : " + batis_havadurumu + "\n" \
  	"Hava durumu son güncelleme: " + tarih_havadurumu)
