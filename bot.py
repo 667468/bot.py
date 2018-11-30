@@ -84,7 +84,6 @@ async def clean(ctx, number):
         msg.append(x)
   await bot.delete_messages(msg)
  else:
-  text = "Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author)
-  await bot.send_message(ctx.message.channel, text)
+  await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
 bot.run(token)
