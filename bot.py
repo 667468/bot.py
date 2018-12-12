@@ -16,9 +16,31 @@ async def on_ready():
  print("BOT: Joined {}".format(str(len(bot.servers))) + " server/s!")
  await bot.change_presence(game=Game(name='Komutlar için "!!help" yazabilirsiniz!'))
 
-@bot.command(name='bbot',
-	description="Botun hakkında bilgi verir.",
-	pass_context=True)
+# Kişisel yardım komutu
+# TODO: Basitleştir.
+bot.remove_command('help')
+@bot.command(pass_context=True)
+async def help(ctx):
+ commands = [bbot,doviz,havadurumu]
+ descriptions = ["Botun hakkında bilgi verir.", "Güncel döviz kurunu gösterir.", "İstanbul şehri için güncel havadurumu bilgisini gösterir."]
+ await bot.say("'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"#UYARI: Komutları kullanmadan önce başlarında '{}' '{}' '{}' bu üç prefixden biri olması gerekli! Örneğin; !!doviz, ??doviz, >>doviz gibi...".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],bot_prefix[0],bot_prefix[1],bot_prefix[2]))
+
+@bot.command(pass_context=True)
+async def adminhelp(ctx):
+ commands = [kick,ban,unban,clear]
+ descriptions = ["Kullanıcıyı sunucudan kickler.","Kullanıcıyı sunucudan banlar.","Kullanıcının sunucudan banını kaldırır.","Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler."]
+ if ctx.message.author.server_permissions.administrator:
+  await bot.say("'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3]))
+ else:
+  await bot.say("Komut listesi için !!help komutunu kullanabilirsiniz!")
+
+@bot.command(pass_context=True)
 async def bbot(ctx):
  await bot.say("Ben Fatih Ünsever tarafından yazılmış bir Discord uygulaması botuyum!")
 
@@ -40,7 +62,7 @@ async def ban(ctx, userName: discord.Member):
  else:
   await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
-# Kullanıcıyı sunucudan unbanlar. # TODO: TEST EDILMEDI!
+# Kullanıcının sunucudan banını kaldırır.
 @bot.command(pass_context=True)
 async def unban(ctx, userName: discord.Member):
  if ctx.message.author.server_permissions.administrator:
@@ -63,9 +85,7 @@ async def clear(ctx, amount=100):
   await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
 # Güncel döviz kurunu gösterir.
-@bot.command(name='doviz',
-	description="Güncel döviz kurunu ve bitcoin fiyatını gösterir.",
-	pass_context=True)
+@bot.command(pass_context=True)
 async def doviz(ctx):
  dovizurl = "http://www.floatrates.com/daily/try.json"
  response = requests.get(dovizurl)
@@ -87,9 +107,7 @@ async def doviz(ctx):
  	"Döviz son güncelleme: " + son_guncelleme)
 
 # İstanbul şehri için güncel havadurumu bilgisini gösterir.
-@bot.command(name='havadurumu',
-	description="İstanbul şehri için güncel havadurumu bilgisini gösterir.",
-	pass_context=True)
+@bot.command(pass_context=True)
 async def havadurumu(ctx):
  # TODO: Havadurumu bilgilerini Türkçe'ye ayarla! API İngilizce
  havadurumuurl = "https://www.metaweather.com/api/location/2344116/"
