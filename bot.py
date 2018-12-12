@@ -1,13 +1,13 @@
 import discord
-from discord.ext import commands
-from discord.ext.commands import Bot
 from discord import Game
+from discord.ext import commands
 import os
 import requests
+import asyncio
 
 bot_prefix = ("!!", "??", ">>") # Bunu kendi isteğinize göre değiştirebilirsiniz. Botun komutu algılaması için, komutun başında bu üç prefixte biri olması gerekli. Örneğin; !!doviz, ??doviz, >>doviz gibi...
 token = (os.environ['BOT_TOKEN']) # Discord botu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin. "os.environ" kısmı; bu bot Github üzerinde paylaşıldığı ve Heroku üzerinde çalıştığı için eklendi. Kendi sunucunuzda çalıştıracak veya botun tokenini direk ekleyecekseniz silebilirsiniz.
-bot = Bot(command_prefix=bot_prefix)
+bot = commands.Bot(command_prefix=bot_prefix)
 
 @bot.event
 async def on_ready():
@@ -51,13 +51,14 @@ async def unban(ctx, userName: discord.Member):
 
 # Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler.
 @bot.command(pass_context=True)
-async def clean(ctx, number):
+async def clear(ctx, amount=100):
  if ctx.message.author.server_permissions.administrator:
-  msg = []
-  number = int(number)
-  async for x in bot.logs_from(ctx.message.channel, limit=number):
-        msg.append(x)
-  await bot.delete_messages(msg)
+  channel = ctx.message.channel
+  messages= []
+  async for message in bot.logs_from(channel, limit=int(amount)):
+        messages.append(message)
+  await bot.delete_messages(messages)
+  print("{} isimli kullanıcı {} adet mesaj sildi!".format(ctx.message.author, amount))
  else:
   await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
