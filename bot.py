@@ -24,7 +24,7 @@ async def on_ready():
  print("BOT: Logged as: {}".format(bot.user.name))
  print("BOT: ID: {}".format(bot.user.id))
  print("BOT: Joined {}".format(str(len(bot.servers))) + " server/s!")
- await bot.change_presence(game=Game(name='Komutlar için "!!help" yazabilirsiniz!'))
+ await bot.change_presence(game=Game(name='Komutlar için: "!!help"'))
 
 # Kişisel yardım komutu
 # TODO: Basitleştir.
@@ -33,10 +33,25 @@ bot.remove_command('help')
 async def help(ctx):
  commands = [bbot,doviz,havadurumu]
  descriptions = ["Botun hakkında bilgi verir.", "Güncel döviz kurunu gösterir.", "İstanbul şehri için güncel havadurumu bilgisini gösterir."]
- await bot.say("'{}' komutu: {}\n" \
+ await bot.say("Bot kullanımı:\n" \
+ 	"```'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}```".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2]))
+
+ # Muzik/Video help
+ commands = [join,leave,play,pause,resume,stop,queue]
+ descriptions = ["Bulunduğunuz ses kanalına katılır.", "Bulunduğunuz ses kanalından ayrılır.", "Şarkıyı başlatır.", "Şarkıyı duraklatır.", "Şarkıyı devam ettirir.", "Şarkıyı durdurur veya bir sonraki şarkıya geçer.", "Şarkıyı sıraya alır."]
+ await bot.say("Müzik/Video botu kullanımı:\n" \
+ 	"```'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
- 	"#UYARI: Komutları kullanmadan önce başlarında '{}' '{}' '{}' bu üç prefixden biri olması gerekli! Örneğin; !!doviz, ??doviz, >>doviz gibi...".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],bot_prefix[0],bot_prefix[1],bot_prefix[2]))
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}```".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3],commands[4],descriptions[4],commands[5],descriptions[5],commands[6],descriptions[6]))
+
+ await bot.say("Örnek 'doviz' komutu kullanımı: ```{}doviz {}doviz {}doviz```".format(bot_prefix[0],bot_prefix[1],bot_prefix[2]))
+ await bot.say("Örnek 'stop' komutu kullanımı: ```{}stop {}stop {}stop```".format(bot_prefix[0],bot_prefix[1],bot_prefix[2]))
 
 @bot.command(pass_context=True)
 async def adminhelp(ctx):
@@ -49,20 +64,6 @@ async def adminhelp(ctx):
  	"'{}' komutu: {}\n".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3]))
  else:
   await bot.say("Komut listesi için !!help komutunu kullanabilirsiniz!")
-
-@bot.command(pass_context=True)
-async def mhelp(ctx):
- commands = [join,leave,play,pause,resume,stop,queue]
- descriptions = ["Bulunduğunuz ses kanalına katılır.", "Bulunduğunuz ses kanalından ayrılır.", "Şarkıyı başlatır.", "Şarkıyı duraklatır.", "Şarkıyı devam ettirir.", "Şarkıyı durdurur veya bir sonraki şarkıya geçer.", "Şarkıyı sıraya alır."]
- await bot.say("'{}' komutu: {}\n" \
- 	"'{}' komutu: {}\n" \
- 	"'{}' komutu: {}\n" \
- 	"'{}' komutu: {}\n" \
- 	"'{}' komutu: {}\n" \
- 	"'{}' komutu: {}\n" \
- 	"'{}' komutu: {}\n" \
- 	"#UYARI: Komutları kullanmadan önce başlarında '{}' '{}' '{}' bu üç prefixden biri olması gerekli!\n" \
- 	"Örnek 'play' komutu kullanımı: {}play https://youtu.be/dQw4w9WgXcQ | {}play dQw4w9WgXcQ".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3],commands[4],descriptions[4],commands[5],descriptions[5],commands[6],descriptions[6],bot_prefix[0],bot_prefix[1],bot_prefix[2],bot_prefix[0],bot_prefix[0]))
 
 @bot.command(pass_context=True)
 async def bbot(ctx):
