@@ -56,12 +56,13 @@ async def help(ctx):
 @bot.command(pass_context=True)
 async def adminhelp(ctx):
  commands = [kick,ban,unban,clear]
- descriptions = ["Kullanıcıyı sunucudan kickler.","Kullanıcıyı sunucudan banlar.","Kullanıcının sunucudan banını kaldırır.","Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler."]
+ descriptions = ["Kullanıcıyı kickler.","Kullanıcıyı banlar.","Kullanıcının banını kaldırır.","Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler."]
  if ctx.message.author.server_permissions.administrator:
-  await bot.say("'{}' komutu: {}\n" \
+  await bot.say("Bu komut listesini sadece sunucu adminleri kullanabilir!\n" \
+  	"```'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
- 	"'{}' komutu: {}\n".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3]))
+ 	"'{}' komutu: {}```".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3]))
  else:
   await bot.say("Komut listesi için !!help komutunu kullanabilirsiniz!")
 
