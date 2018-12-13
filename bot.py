@@ -4,10 +4,14 @@ from discord.ext import commands
 import os
 import requests
 import asyncio
+import youtube_dl
 
 bot_prefix = ("!!", "??", ">>") # Bunu kendi isteğinize göre değiştirebilirsiniz. Botun komutu algılaması için, komutun başında bu üç prefixte biri olması gerekli. Örneğin; !!doviz, ??doviz, >>doviz gibi...
 token = (os.environ['BOT_TOKEN']) # Discord botu oluşturduğunuzda çıkan tokeni 'BOT_TOKEN' kısmına ekleyin. "os.environ" kısmı; bu bot Github üzerinde paylaşıldığı ve Heroku üzerinde çalıştığı için eklendi. Kendi sunucunuzda çalıştıracak veya botun tokenini direk ekleyecekseniz silebilirsiniz.
 bot = commands.Bot(command_prefix=bot_prefix)
+
+players = {}
+queues = {}
 
 @bot.event
 async def on_ready():
@@ -39,6 +43,20 @@ async def adminhelp(ctx):
  	"'{}' komutu: {}\n".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3]))
  else:
   await bot.say("Komut listesi için !!help komutunu kullanabilirsiniz!")
+
+@bot.command(pass_context=True)
+async def mhelp(ctx):
+ commands = [join,leave,play,pause,resume,stop,queue]
+ descriptions = ["Bulunduğunuz ses kanalına katılır.", "Bulunduğunuz ses kanalından ayrılır.", "Şarkıyı başlatır.", "Şarkıyı duraklatır.", "Şarkıyı devam ettirir.", "Şarkıyı durdurur veya bir sonraki şarkıya geçer.", "Şarkıyı sıraya alır."]
+ await bot.say("'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"'{}' komutu: {}\n" \
+ 	"#UYARI: Komutları kullanmadan önce başlarında '{}' '{}' '{}' bu üç prefixden biri olması gerekli!\n" \
+ 	"Örnek 'play' komutu kullanımı: {}play https://youtu.be/dQw4w9WgXcQ | {}play dQw4w9WgXcQ".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2],commands[3],descriptions[3],commands[4],descriptions[4],commands[5],descriptions[5],commands[6],descriptions[6],bot_prefix[0],bot_prefix[1],bot_prefix[2],bot_prefix[0],bot_prefix[0]))
 
 @bot.command(pass_context=True)
 async def bbot(ctx):
@@ -131,5 +149,51 @@ async def havadurumu(ctx):
  	"Güneş'in doğuşu: " + dogus_havadurumu + "\n" \
  	"Güneş'in batışı : " + batis_havadurumu + "\n" \
  	"Hava durumu son güncelleme: " + tarih_havadurumu)
+
+@bot.command(pass_context=True)
+async def join(ctx):
+	channel = ctx.message.author.voice.voice_channel
+	await bot.join_voice_channel(channel)
+
+@bot.command(pass_context=True)
+async def leave(ctx):
+	server = ctx.message.server
+	voice_client = bot.voice_client_in(server)
+	await voice_client.disconnect()
+
+@bot.command(pass_context=True)
+async def play(ctx, url):
+	server = ctx.message.server
+	voice_client = bot.voice_client_in(server)
+	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+	players[server.id] = player
+	player.start()
+
+@bot.command(pass_context=True)
+async def pause(ctx):
+	id = ctx.message.server.id
+	players[id].pause()
+
+@bot.command(pass_context=True)
+async def resume(ctx):
+	id = ctx.message.server.id
+	players[id].resume()
+
+@bot.command(pass_context=True)
+async def stop(ctx):
+	id = ctx.message.server.id
+	players[id].stop()
+
+@bot.command(pass_context=True)
+async def queue(ctx, url):
+	server = ctx.message.server
+	voice_client = bot.voice_client_in(server)
+	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+
+	if server.id in queues:
+		queues[server.id].append(player)
+	else:
+		queues[server.id] = [player]
+	await bot.say('{}, Video sıraya eklendi.'.format(ctx.message.author))
 
 bot.run(token)
