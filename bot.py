@@ -13,6 +13,12 @@ bot = commands.Bot(command_prefix=bot_prefix)
 players = {}
 queues = {}
 
+def check_queue(id):
+	if queues[id] != []:
+		player = queues[id].pop(0)
+		players[id] = player
+		player.start()
+
 @bot.event
 async def on_ready():
  print("BOT: Logged as: {}".format(bot.user.name))
