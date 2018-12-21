@@ -26,22 +26,23 @@ async def on_ready():
  print("BOT: Joined {}".format(str(len(bot.servers))) + " server/s!")
  await bot.change_presence(game=Game(name='Komutlar için: "!!help"'))
 
-# Kişisel yardım komutu
-# TODO: Basitleştir.
+### Kişisel yardım komutu
 bot.remove_command('help')
 @bot.command(pass_context=True)
 async def help(ctx):
- commands = [bbot,doviz,havadurumu]
+ commands = [about,doviz,havadurumu]
  descriptions = ["Botun hakkında bilgi verir.", "Güncel döviz kurunu gösterir.", "İstanbul şehri için güncel havadurumu bilgisini gösterir."]
- await bot.say("Bot kullanımı:\n" \
+ await bot.say(\
+ 	"Bot komutları:\n" \
  	"```'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
  	"'{}' komutu: {}```".format(commands[0],descriptions[0],commands[1],descriptions[1],commands[2],descriptions[2]))
 
- # Muzik/Video help
+ ## Muzik/Video yardım komutu
  commands = [join,leave,play,pause,resume,stop,queue]
  descriptions = ["Bulunduğunuz ses kanalına katılır.", "Bulunduğunuz ses kanalından ayrılır.", "Şarkıyı başlatır.", "Şarkıyı duraklatır.", "Şarkıyı devam ettirir.", "Şarkıyı durdurur veya bir sonraki şarkıya geçer.", "Şarkıyı sıraya alır."]
- await bot.say("Müzik/Video botu kullanımı:\n" \
+ await bot.say(\
+ 	"Müzik komutları:\n" \
  	"```'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
@@ -53,12 +54,14 @@ async def help(ctx):
  await bot.say("Örnek 'doviz' komutu kullanımı: ```{}doviz {}doviz {}doviz```".format(bot_prefix[0],bot_prefix[1],bot_prefix[2]))
  await bot.say("Örnek 'stop' komutu kullanımı: ```{}stop {}stop {}stop```".format(bot_prefix[0],bot_prefix[1],bot_prefix[2]))
 
+### Sunucu adminleri için yardım komutu. ('help' komutunda gözükmez!)
 @bot.command(pass_context=True)
 async def adminhelp(ctx):
  commands = [kick,ban,unban,clear]
  descriptions = ["Kullanıcıyı kickler.","Kullanıcıyı banlar.","Kullanıcının banını kaldırır.","Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler."]
  if ctx.message.author.server_permissions.administrator:
-  await bot.say("Bu komut listesini sadece sunucu adminleri kullanabilir!\n" \
+  await bot.say(\
+  	"Bu komut listesini sadece sunucu adminleri kullanabilir!\n" \
   	"```'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
  	"'{}' komutu: {}\n" \
@@ -66,11 +69,12 @@ async def adminhelp(ctx):
  else:
   await bot.say("Komut listesi için !!help komutunu kullanabilirsiniz!")
 
+### Botun hakkında bilgi verir.
 @bot.command(pass_context=True)
-async def bbot(ctx):
- await bot.say("Ben Fatih Ünsever tarafından yazılmış bir Discord uygulaması botuyum!")
+async def about(ctx):
+ await bot.say("Ben Fatih Ünsever tarafından yazılmış bir Discord uygulaması botuyum! Komutlar için {}help yazabilirsiniz!".format(bot_prefix[0]))
 
-# Kullanıcıyı sunucudan kickler.
+### Kullanıcıyı kickler.
 @bot.command(pass_context=True)
 async def kick(ctx, userName: discord.Member):
  if ctx.message.author.server_permissions.administrator:
@@ -79,7 +83,7 @@ async def kick(ctx, userName: discord.Member):
  else:
   await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
-# Kullanıcıyı sunucudan banlar.
+### Kullanıcıyı banlar.
 @bot.command(pass_context=True)
 async def ban(ctx, userName: discord.Member):
  if ctx.message.author.server_permissions.administrator:
@@ -88,7 +92,7 @@ async def ban(ctx, userName: discord.Member):
  else:
   await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
-# Kullanıcının sunucudan banını kaldırır.
+### Kullanıcının banını kaldırır.
 @bot.command(pass_context=True)
 async def unban(ctx, userName: discord.Member):
  if ctx.message.author.server_permissions.administrator:
@@ -97,7 +101,7 @@ async def unban(ctx, userName: discord.Member):
  else:
   await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
-# Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler.
+### Yeniden eskiye yazdığınız sayı kadar mesaj siler. Minimum 2, maksimum 100 mesaj siler.
 @bot.command(pass_context=True)
 async def clear(ctx, amount=100):
  if ctx.message.author.server_permissions.administrator:
@@ -110,7 +114,7 @@ async def clear(ctx, amount=100):
  else:
   await bot.say("Üzgünüm {}, bunu yapmaya izniniz yok!".format(ctx.message.author))
 
-# Güncel döviz kurunu gösterir.
+#### Güncel döviz kurunu gösterir.
 @bot.command(pass_context=True)
 async def doviz(ctx):
  dovizurl = "http://www.floatrates.com/daily/try.json"
@@ -123,7 +127,8 @@ async def doviz(ctx):
  kwd_alis = response.json()['kwd']['inverseRate']
  sar_alis = response.json()['sar']['inverseRate']
  son_guncelleme = response.json()['usd']['date']
- await bot.say("Güncel 1 ABD Doları " + "alış fiyatı: {}".format(float("%.2f" % usd_alis)) + " TRY\n" \
+ await bot.say(\
+ 	"Güncel 1 ABD Doları " + "alış fiyatı: {}".format(float("%.2f" % usd_alis)) + " TRY\n" \
  	"Güncel 1 Euro " + "alış fiyatı: {}".format(float("%.2f" % eur_alis)) + " TRY\n" \
  	"Güncel 1 İngiliz Sterlini " + "alış fiyatı: {}".format(float("%.2f" % gbp_alis)) + " TRY\n" \
  	"Güncel 1 Kanada Doları " + "alış fiyatı: {}".format(float("%.2f" % cad_alis)) + " TRY\n" \
@@ -132,10 +137,10 @@ async def doviz(ctx):
  	"Güncel 1 S. Arabistan Riyali " + "alış fiyatı: {}".format(float("%.2f" % sar_alis)) + " TRY\n" \
  	"Döviz son güncelleme: " + son_guncelleme)
 
-# İstanbul şehri için güncel havadurumu bilgisini gösterir.
+### Istanbul şehri için güncel havadurumu bilgisini gösterir.
 @bot.command(pass_context=True)
 async def havadurumu(ctx):
- # TODO: Havadurumu bilgilerini Türkçe'ye ayarla! API İngilizce
+ #TODO: Havadurumu bilgilerini Türkçe'ye ayarla! API İngilizce
  havadurumuurl = "https://www.metaweather.com/api/location/2344116/"
  response = requests.get(havadurumuurl)
  havadurumu = response.json()['consolidated_weather'][0]['weather_state_name']
@@ -148,7 +153,8 @@ async def havadurumu(ctx):
  dogus_havadurumu = response.json()['sun_rise']
  batis_havadurumu = response.json()['sun_set']
  tarih_havadurumu = response.json()['consolidated_weather'][0]['applicable_date']
- await bot.say("Hava durumu: " + havadurumu + "\n" \
+ await bot.say(\
+ 	"Hava durumu: " + havadurumu + "\n" \
  	"Gün içerisinde Ort. sıcaklık: {}".format(int(ortsicaklik_havadurumu)) + " °C\n" \
  	"Gün içerisinde Min. sıcaklık: {}".format(int(minsicaklik_havadurumu)) + " °C\n" \
  	"Gün içerisinde Max. sıcaklık: {}".format(int(maxsicaklik_havadurumu)) + " °C\n" \
@@ -172,9 +178,10 @@ async def leave(ctx):
 @bot.command(pass_context=True)
 async def play(ctx, url):
 	server = ctx.message.server
+	id = server.id
 	voice_client = bot.voice_client_in(server)
-	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
-	players[server.id] = player
+	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(id))
+	players[id] = player
 	player.start()
 
 @bot.command(pass_context=True)
@@ -195,13 +202,14 @@ async def stop(ctx):
 @bot.command(pass_context=True)
 async def queue(ctx, url):
 	server = ctx.message.server
+	id = server.id
 	voice_client = bot.voice_client_in(server)
-	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(id))
 
-	if server.id in queues:
-		queues[server.id].append(player)
+	if id in queues:
+		queues[id].append(player)
 	else:
-		queues[server.id] = [player]
+		queues[id] = [player]
 	await bot.say('{}, Video sıraya eklendi.'.format(ctx.message.author))
 
 bot.run(token)
