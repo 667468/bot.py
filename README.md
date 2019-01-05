@@ -1,5 +1,5 @@
-# Bots
-Python ile yazılmış botların bulunduğu repository. Branch değiştirerek, botların kaynak kodlarına ulaşabilirsiniz.
+# Python Bots
+Python ile yazılmış uygulama botların bulunduğu repository. Branch değiştirerek botların kaynak kodlarına ulaşabilirsiniz.
 
 ## Branches
 ```
@@ -8,11 +8,11 @@ telegram
 ```
 
 ## Contributing
-Pull requestsler kabul edilmez! Bu kişisel bir projedir.
+Pull requestsler kabul edilmez! Bu kişisel bir projedir!
 
 ## License
 ```
-Copyright (C) 2018 Fatih Ünsever (fatihunsever)
+Copyright (C) 2018-2019 Fatih Ünsever (fatihunsever)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
