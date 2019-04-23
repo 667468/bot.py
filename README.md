@@ -1,5 +1,5 @@
 # Python Bots
-Python ile yazılmış uygulama botların bulunduğu repository. Branch değiştirerek botların kaynak kodlarına ulaşabilirsiniz.
+Branch değiştirerek botların kaynak kodlarına ulaşabilirsiniz.
 
 ## Branches
 ```
@@ -8,7 +8,7 @@ telegram
 ```
 
 ## Contributing
-Pull requestsler kabul edilmez! Bu kişisel bir projedir!
+Pull requests kabul edilmez! Bu kişisel bir projedir!
 
 ## License
 ```
