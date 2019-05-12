@@ -1,5 +1,4 @@
 discord
 asyncio
 requests
-PyNaCl
-youtube_dl
+beautifulsoup4
