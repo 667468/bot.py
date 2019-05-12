@@ -7,7 +7,7 @@ import asyncio
 from bs4 import BeautifulSoup
 import urllib.request
 
-bot_prefix = ("!!", "??", ">>") # Bunu kendi isteğinize göre değiştirebilirsiniz. Botun komutuları algılaması için, komutların başında bu üç prefixte biri olması gerekli. Örneğin; !!xyz, ??xyz, >>xyz gibi...
+bot_prefix = ("!!", "??", ">>") # Bunu kendi isteğinize göre değiştirebilirsiniz. Botun komutları algılaması için, komutların başında bu üç prefixte biri olması gerekli. Örneğin; !!xyz, ??xyz, >>xyz gibi...
 token = (os.environ['BOT_TOKEN']) # Discord botunuzun tokenini 'export BOT_TOKEN=XXX' şeklinde veya '(os.environ)' kısmını silip, 'BOT_TOKEN' kısmına ekleyin.
 bot = commands.Bot(command_prefix=bot_prefix)
 
@@ -58,7 +58,7 @@ async def adminhelp(ctx):
 	admin_kontrol = message_author.guild_permissions.administrator
 	if admin_kontrol:
 		await ctx.send(\
-			"Bu komut listesini sadece sunucu adminleri kullanabilir!\n" \
+			"Bu komutları sadece sunucu adminleri kullanabilir!\n" \
 			"```'{}' komutu: {}\n" \
 			"'{}' komutu: {}\n" \
 			"'{}' komutu: {}\n" \
@@ -84,7 +84,7 @@ async def kick(ctx, user: discord.Member, *, reason):
 
 ### Kullanıcıyı banlar.
 @bot.command(pass_context=True)
-##FIXME: Calisiyor ama banlanan kisi tekrar guilde katilabiliyor.
+##FIXME: Calisiyor ama banlanan kisi tekrar guilde katilabiliyor???
 async def ban(ctx, user: discord.Member, *, reason):
 	message_author = ctx.message.author
 	admin_kontrol = message_author.guild_permissions.administrator
@@ -137,25 +137,29 @@ async def doviz(ctx):
 	cad_alis = response.json()[4]['buyPrice']
 	cad_satis = response.json()[4]['sellPrice']
 	await ctx.send(\
- 		"1 {} ".format(usd_name) + "alış fiyatı: {}".format(float("%.2f" % usd_alis)) + " TRY\n" + "satış fiyatı: {}".format(float("%.2f" % usd_satis)) + " TRY\n" \
- 		"1 {} ".format(eur_name) + "alış fiyatı: {}".format(float("%.2f" % eur_alis)) + " TRY\n" + "satış fiyatı: {}".format(float("%.2f" % eur_satis)) + " TRY\n" \
-		"1 {} ".format(gbp_name) + "alış fiyatı: {}".format(float("%.2f" % gbp_alis)) + " TRY\n" + "satış fiyatı: {}".format(float("%.2f" % gbp_satis)) + " TRY\n" \
- 		"1 {} ".format(chf_name) + "alış fiyatı: {}".format(float("%.2f" % chf_alis)) + " TRY\n" + "satış fiyatı: {}".format(float("%.2f" % chf_satis)) + " TRY\n" \
- 		"1 {} ".format(cad_name) + "alış fiyatı: {}".format(float("%.2f" % cad_alis)) + " TRY\n" + "satış fiyatı: {}".format(float("%.2f" % cad_satis)) + " TRY\n")
+ 		"1 {} ".format(usd_name) + "alış fiyatı: {:.2f} ".format(usd_alis) + "TRY " + "satış fiyatı: {:.2f}".format(usd_satis) + " TRY\n" \
+ 		"1 {} ".format(eur_name) + "alış fiyatı: {:.2f} ".format(eur_alis) + "TRY " + "satış fiyatı: {:.2f}".format(eur_satis) + " TRY\n" \
+		"1 {} ".format(gbp_name) + "alış fiyatı: {:.2f} ".format(gbp_alis) + "TRY " + "satış fiyatı: {:.2f}".format(gbp_satis) + " TRY\n" \
+ 		"1 {} ".format(chf_name) + "alış fiyatı: {:.2f} ".format(chf_alis) + "TRY " + "satış fiyatı: {:.2f}".format(chf_satis) + " TRY\n" \
+ 		"1 {} ".format(cad_name) + "alış fiyatı: {:.2f} ".format(cad_alis) + "TRY " + "satış fiyatı: {:.2f}".format(cad_satis) + " TRY\n")
 
 ### Istenilen şehir için güncel havadurumu bilgisini gösterir.
 @bot.command(pass_context=True)
 async def havadurumu(ctx, city):
 	havadurumu_url = urllib.request.urlopen("https://www.mgm.gov.tr/FTPDATA/bolgesel/" + city + "/sonSOA.xml")
+	#await ctx.send("{}, lütfen komutu girdikten sonra şehiri yazınız. Örnek: ```{}havadurumu Izmir```".format(message_author,bot_prefix[0]))
 	xml = BeautifulSoup(havadurumu_url, 'xml')
-	for i in xml.findAll('Kemo'):
+	for i in xml.findAll('SOA', limit=1):
 		havadurumu = i.find('GenelDurum').text
 		havadurumu_tarih = i.find('Tarih').text
-		hava_sicakligi = i.find('HavaSicakligi').text
+		sicaklik = i.find('Mak').text
+		sicaklik_degisimi = i.find('HavaSicakligi').text
 		ruzgar_durumu = i.find('RuzgarDurum').text
+
 	await ctx.send(\
+		"Sıcaklık: " + sicaklik + " °C" + "\n" \
 		"Hava durumu: " + havadurumu + "\n" \
-		"Sıcaklık değişimi: " + hava_sicakligi + "\n" \
+		"Sıcaklık değişimi: " + sicaklik_degisimi + "\n" \
 		"Rüzgar durumu: " + ruzgar_durumu + "\n" \
 		"Son güncelleme: " + havadurumu_tarih)
 
