@@ -2,3 +2,4 @@ discord
 asyncio
 requests
 beautifulsoup4
+lxml
