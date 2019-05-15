@@ -24,7 +24,7 @@ bot.remove_command('help')
 @bot.command(pass_context=True)
 async def help(ctx):
 	commands = [about,doviz,havadurumu]
-	descriptions = ["Botun hakkında bilgi verir.", "Güncel döviz kurunu gösterir.", "İstanbul şehri için güncel havadurumu bilgisini gösterir."]
+	descriptions = ["Botun hakkında bilgi verir.", "Güncel döviz kurunu gösterir.", "Istenilen şehir için güncel havadurumu bilgisini gösterir."]
 	await ctx.send(\
 		"Bot komutları:\n" \
 		"```'{}' komutu: {}\n" \
@@ -155,7 +155,6 @@ async def havadurumu(ctx, city):
 		sicaklik = i.find('Mak').text
 		sicaklik_degisimi = i.find('HavaSicakligi').text
 		ruzgar_durumu = i.find('RuzgarDurum').text
-
 	await ctx.send(\
 		"Sıcaklık: " + sicaklik + " °C" + "\n" \
 		"Hava durumu: " + havadurumu + "\n" \
