@@ -73,23 +73,29 @@ async def about(ctx):
 
 ### Kullanıcıyı kickler.
 @bot.command(pass_context=True)
-async def kick(ctx, user: discord.Member, *, reason):
+async def kick(ctx, user: discord.Member, *, reason = None):
 	message_author = ctx.message.author
 	admin_kontrol = message_author.guild_permissions.administrator
+	if not reason:
+		await ctx.send("Kick komutunu kullanmak için sebep yazmalısınız! Örn: {}kick <kullanici-adi> <küfür,spam vs.>".format(bot_prefix[0]))
+		return
 	if admin_kontrol:
-		await user.kick(reason=reason)
+		await user.kick(reason=reason) # 'Reason' sayesinde kick ve ban komutlarini kullanmak icin sebep yazmamiz gerekiyor.
 		print("'{}' isimli kullanıcı, '{}' sebebinden dolayi kicklendi!".format(user,reason))
 	else:
 		await ctx.send("Üzgünüm '{}', bunu yapmaya izniniz yok!".format(message_author))
 
 ### Kullanıcıyı banlar.
 @bot.command(pass_context=True)
-##FIXME: Calisiyor ama banlanan kisi tekrar guilde katilabiliyor???
-async def ban(ctx, user: discord.Member, *, reason):
+#FIXME: Calisiyor ama banlanan kisi tekrar guilde katilabiliyor???
+async def ban(ctx, user: discord.Member, *, reason = None):
 	message_author = ctx.message.author
 	admin_kontrol = message_author.guild_permissions.administrator
+	if not reason:
+		await ctx.send("Ban komutunu kullanmak için sebep yazmalısınız! Örn: {}ban <kullanici-adi> <küfür,spam vs.>".format(bot_prefix[0]))
+		return
 	if admin_kontrol:
-		await user.ban(reason=reason)
+		await user.ban(reason=reason) # 'Reason' sayesinde kick ve ban komutlarini kullanmak icin sebep yazmamiz gerekiyor.
 		print("'{}' isimli kullanıcı, '{}' sebebinden dolayi banlandı!".format(user,reason))
 	else:
 		await ctx.send("Üzgünüm '{}', bunu yapmaya izniniz yok!".format(message_author))
@@ -111,7 +117,7 @@ async def clear(ctx, amount=100):
 	message_author = ctx.message.author
 	admin_kontrol = message_author.guild_permissions.administrator
 	if admin_kontrol:
-		await ctx.channel.purge(limit=int(amount))
+		await ctx.channel.purge(limit=int(amount)) # 'Purge' sayesinde mesaj gecmisini bilmemize gerek kalmiyor.
 		print("{} isimli kullanıcı {} adet mesaj sildi!".format(message_author, amount))
 	else:
 		await ctx.send("Üzgünüm {}, bunu yapmaya izniniz yok!".format(message_author))
@@ -145,9 +151,13 @@ async def doviz(ctx):
 
 ### Istenilen şehir için güncel havadurumu bilgisini gösterir.
 @bot.command(pass_context=True)
-async def havadurumu(ctx, city):
+async def havadurumu(ctx, city = None):
+	message_author = ctx.message.author
+	if not city:
+		await ctx.send("{}, lütfen komutu girdikten sonra şehiri yazınız. Örnek: ```{}havadurumu Izmir```".format(message_author,bot_prefix[0]))
+		return
+	#FIXME: Bolgesel calisiyor.
 	havadurumu_url = urllib.request.urlopen("https://www.mgm.gov.tr/FTPDATA/bolgesel/" + city + "/sonSOA.xml")
-	#await ctx.send("{}, lütfen komutu girdikten sonra şehiri yazınız. Örnek: ```{}havadurumu Izmir```".format(message_author,bot_prefix[0]))
 	xml = BeautifulSoup(havadurumu_url, 'xml')
 	for i in xml.findAll('SOA', limit=1):
 		havadurumu = i.find('GenelDurum').text
