@@ -8,7 +8,6 @@ bot = telebot.TeleBot(token)
 def help(message):
 	info = (\
 		'/randompass - Rastgele istenilen uzunlukta şifre oluşturur.\n' \
-		'/randomuser - Rastgele kullanıcı bilgileri(isim,soyisim,cinsiyet,yaş vs.) üretir.\n' \
 		'/randomcat - Rastgele kedi fotoğrafı gönderir.\n' \
 		'/randomdog - Rastgele köpek fotoğrafı gönderir.\n' \
 		'/flipcoin - Yazı-tura atar.'
@@ -20,41 +19,14 @@ def help(message):
 def randompass(message):
 	try:
 		passlen = int(message.text.split(' ')[1])
-		if passlen < 6:
-			bot.send_message(message.chat.id, 'Güvenliğiniz için minimum 6 haneli şifre oluşturun!')
+		if passlen < 12:
+			bot.send_message(message.chat.id, 'Güvenliğiniz için minimum 12 karakterli şifre oluşturun!')
 	except IndexError:
-		bot.send_message(message.chat.id, 'Örnek kullanım: /randompass 9')
+		bot.send_message(message.chat.id, 'Örnek kullanım: /randompass 29')
 		return
-	passgenerator = [random.choice(string.ascii_letters+string.digits) for i in range(passlen)]
+	passgenerator = [random.choice(string.ascii_letters+string.digits+string.punctuation) for i in range(passlen)]
 	passgenerator = ("".join(passgenerator))
 	bot.send_message(message.chat.id, passgenerator)
-
-@bot.message_handler(commands=['randomuser'])
-@bot.edited_message_handler(commands=['randomuser'])
-def randomuser(message):
-	randomuser_url = "https://uinames.com/api/?ext"
-	response = requests.get(randomuser_url)
-	value_randomuser_name = response.json()['name']
-	value_randomuser_surname = response.json()['surname']
-	value_randomuser_gender = response.json()['gender']
-	if value_randomuser_gender == 'male':
-		value_randomuser_gender = 'Erkek'
-	else:
-		value_randomuser_gender = 'Kadın'
-	value_randomuser_region = response.json()['region']
-	value_randomuser_age = response.json()['age']
-	value_randomuser_birthday = response.json()['birthday']['dmy']
-	value_randomuser_email = response.json()['email']
-	generated_account = (\
-		'İsim: ' + value_randomuser_name + '\n' \
-		'Soyisim: ' + value_randomuser_surname + '\n' \
-		'Cinsiyet: ' + value_randomuser_gender + '\n' \
-		'Yaş: ' + str(value_randomuser_age) + '\n' \
-		'Doğum Yeri: ' + value_randomuser_region + '\n' \
-		'Doğum Tarihi: ' + str(value_randomuser_birthday) + '\n' \
-		'E-mail: ' + value_randomuser_email
-		)
-	bot.send_message(message.chat.id, generated_account)
 
 @bot.message_handler(commands=['randomcat'])
 @bot.edited_message_handler(commands=['randomcat'])
